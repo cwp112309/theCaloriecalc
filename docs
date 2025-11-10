@@ -1,7 +1,3 @@
-calorie-calc (repo root)
-│
-├── docs/
-│   ├── index.html
-│   └── .nojekyll
-│
-└── (nothing else required for now)
+docs/
+    ├── index.html
+    └── .nojekyll
