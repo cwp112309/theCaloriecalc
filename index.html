@@ -4,20 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calorie Calc</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #f7fafc; color: #1a202c; display: flex; justify-content: center; }
-.container { max-width: 900px; width: 100%; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-h1 { margin: 0; font-size: 24px; }
-button { background: #2b6cb0; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-button.alt { background: #edf2f7; color: #1a202c; }
-.card { background: #fff; padding: 12px; border-radius: 10px; border: 1px solid #e6edf3; margin-bottom: 12px; }
-label { display: block; margin-top: 8px; font-size: 13px; color: #4a5568; }
-input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; margin-top: 6px; }
-#entriesList div { padding: 6px 0; border-bottom: 1px dashed #e6edf3; display: flex; justify-content: space-between; }
-.tot { font-size: 18px; font-weight: 700; margin-top: 8px; }
-.hint { font-size: 12px; color: #718096; margin-top: 8px; }
-canvas { margin-top: 12px; }
+body { font-family: 'Inter', sans-serif; background: #f0f4f8; margin:0; padding:0; }
+.container { max-width: 900px; margin: 40px auto; padding: 20px; background:white; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+h1,h2,h3{margin:0;}
+header { display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;}
+button{cursor:pointer;border:none;border-radius:8px;padding:8px 14px;font-weight:600;}
+button.primary{background:#2b6cb0;color:white;}
+button.secondary{background:#edf2f7;color:#1a202c;}
+.card{background:white;padding:18px;margin-bottom:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+label{display:block;margin-top:10px;font-weight:500;}
+input[type="text"],input[type="number"],input[type="password"]{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #cbd5e0;}
+#entriesList div{padding:6px 0;display:flex;justify-content:space-between;border-bottom:1px dashed #e2e8f0;}
+.tot{font-size:20px;font-weight:700;margin-top:8px;color:#2b6cb0;}
+#adPlaceholder{background:#e2e8f0;color:#718096;text-align:center;padding:12px;margin-bottom:12px;border-radius:8px;}
+a{color:#2b6cb0;text-decoration:none;}
+a:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -26,12 +30,13 @@ canvas { margin-top: 12px; }
 <h1>Calorie Calc</h1>
 <div id="authUI">
   <div id="anonArea">
-    <button id="showLogin">Login</button>
-    <button id="showSignup" class="alt">Sign Up</button>
+    <button id="showLogin" class="secondary">Login</button>
+    <button id="showSignup" class="secondary">Sign Up</button>
+    <span class="secondary" id="skipLogin" style="margin-left:10px;">Use Anonymously</span>
   </div>
   <div id="userArea" style="display:none;">
     <span id="userEmail"></span>
-    <button id="logoutBtn" class="alt">Logout</button>
+    <button id="logoutBtn" class="secondary">Logout</button>
   </div>
 </div>
 </header>
@@ -41,172 +46,33 @@ canvas { margin-top: 12px; }
     <h3>Sign Up</h3>
     <label>Username <input id="signupUsername" type="text"></label>
     <label>Password <input id="signupPass" type="password"></label>
-    <button id="signupBtn">Sign Up</button>
-    <div class="hint">Already have an account? <a href="#" id="toLogin">Login</a></div>
+    <button id="signupBtn" class="primary">Sign Up</button>
+    <div style="margin-top:10px;">Already have an account? <a href="#" id="toLogin">Login</a></div>
   </div>
-
   <div id="loginForm" style="display:none;">
     <h3>Login</h3>
     <label>Username <input id="loginUsername" type="text"></label>
     <label>Password <input id="loginPass" type="password"></label>
-    <button id="loginBtn">Login</button>
-    <div class="hint">No account? <a href="#" id="toSignup">Sign Up</a></div>
+    <button id="loginBtn" class="primary">Login</button>
+    <div style="margin-top:10px;">No account? <a href="#" id="toSignup">Sign Up</a></div>
   </div>
 </div>
 
 <div id="mainContent" style="display:none;">
+  <div id="adPlaceholder">Ad Placeholder (Google Ads code here)</div>
+  
   <div class="card">
     <h3>Add Food</h3>
     <label>Food name <input id="foodName" type="text" placeholder="Banana"></label>
     <label>Calories <input id="calories" type="number" placeholder="105"></label>
-    <button id="addBtn">Add Entry</button>
-    <button id="exportCsv" class="alt">Export CSV</button>
+    <button id="addBtn" class="primary">Add Entry</button>
   </div>
 
   <div class="card">
-    <h3>Today's Total</h3>
+    <h3>Today's Total Calories</h3>
     <div class="tot" id="todayTotal">0 kcal</div>
   </div>
 
   <div class="card">
     <h3>Recent Entries</h3>
-    <div id="entriesList"><div class="hint">No entries yet.</div></div>
-  </div>
-
-  <div class="card">
-    <h3>Calories Last 7 Days</h3>
-    <canvas id="calorieChart" width="400" height="150"></canvas>
-  </div>
-
-  <div class="card">
-    <h3>Quick Calculator</h3>
-    <label>Amount (g) <input id="calcAmount" type="number" placeholder="100"></label>
-    <label>Calories per 100g <input id="calcPer100" type="number" placeholder="250"></label>
-    <button id="calcBtn">Calculate</button>
-    <div id="calcResult" class="hint"></div>
-  </div>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-let currentUser = null;
-let chart = null;
-
-function showAnon() {
-  document.getElementById('anonArea').style.display = 'flex';
-  document.getElementById('userArea').style.display = 'none';
-  document.getElementById('signupForm').style.display = 'none';
-  document.getElementById('loginForm').style.display = 'none';
-  document.getElementById('mainContent').style.display = 'none';
-}
-showAnon();
-
-// Switch forms
-document.getElementById('showLogin').onclick = ()=>{ document.getElementById('loginForm').style.display='block'; document.getElementById('signupForm').style.display='none'; };
-document.getElementById('showSignup').onclick = ()=>{ document.getElementById('signupForm').style.display='block'; document.getElementById('loginForm').style.display='none'; };
-document.getElementById('toLogin').onclick = e=>{ e.preventDefault(); document.getElementById('loginForm').style.display='block'; document.getElementById('signupForm').style.display='none'; };
-document.getElementById('toSignup').onclick = e=>{ e.preventDefault(); document.getElementById('signupForm').style.display='block'; document.getElementById('loginForm').style.display='none'; };
-
-// Signup
-document.getElementById('signupBtn').onclick = ()=>{
-  const u = document.getElementById('signupUsername').value.trim();
-  const p = document.getElementById('signupPass').value;
-  if(!u||!p){ alert('Enter username & password'); return; }
-  if(localStorage.getItem('user_'+u)){ alert('Username exists'); return; }
-  localStorage.setItem('user_'+u, JSON.stringify({password:p, entries:[]}));
-  alert('Signed up! Login now.'); document.getElementById('signupForm').style.display='none'; document.getElementById('loginForm').style.display='block';
-};
-
-// Login
-document.getElementById('loginBtn').onclick = ()=>{
-  const u = document.getElementById('loginUsername').value.trim();
-  const p = document.getElementById('loginPass').value;
-  const data = localStorage.getItem('user_'+u);
-  if(!data){ alert('User not found'); return; }
-  const obj = JSON.parse(data);
-  if(obj.password!==p){ alert('Wrong password'); return; }
-  currentUser = u; document.getElementById('anonArea').style.display='none'; document.getElementById('userArea').style.display='block'; document.getElementById('userEmail').innerText=u;
-  document.getElementById('mainContent').style.display='block';
-  renderEntries();
-};
-
-// Logout
-document.getElementById('logoutBtn').onclick = ()=>{ currentUser=null; showAnon(); };
-
-// Add Entry
-document.getElementById('addBtn').onclick = ()=>{
-  if(!currentUser) return alert('Login first');
-  const food = document.getElementById('foodName').value.trim();
-  const cal = Number(document.getElementById('calories').value);
-  if(!food||!cal) return alert('Provide food and calories');
-  const data = JSON.parse(localStorage.getItem('user_'+currentUser));
-  data.entries.push({food, calories: cal, time: new Date().toISOString()});
-  localStorage.setItem('user_'+currentUser, JSON.stringify(data));
-  document.getElementById('foodName').value=''; document.getElementById('calories').value='';
-  renderEntries();
-};
-
-// Render Entries & Today Total & Chart
-function renderEntries(){
-  if(!currentUser) return;
-  const data = JSON.parse(localStorage.getItem('user_'+currentUser));
-  const entries = data.entries.reverse();
-  let today = new Date().toISOString().slice(0,10);
-  let total=0; let html='';
-  entries.forEach(e=>{
-    if(e.time.slice(0,10)===today) total+=Number(e.calories);
-    html += `<div><div>${e.food}<br><span class="hint">${new Date(e.time).toLocaleString()}</span></div><div>${e.calories} kcal</div></div>`;
-  });
-  document.getElementById('todayTotal').innerText = total+' kcal';
-  document.getElementById('entriesList').innerHTML = html || '<div class="hint">No entries yet.</div>';
-  renderChart(data.entries);
-}
-
-// Export CSV
-document.getElementById('exportCsv').onclick = ()=>{
-  if(!currentUser) return alert('Login first');
-  const data = JSON.parse(localStorage.getItem('user_'+currentUser));
-  const rows = [['Food','Calories','Date']];
-  data.entries.forEach(e=>rows.push([e.food,e.calories,e.time]));
-  const csv = rows.map(r=>r.join(',')).join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='calorie_entries.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-};
-
-// Quick Calculator
-document.getElementById('calcBtn').onclick = ()=>{
-  const amt = Number(document.getElementById('calcAmount').value);
-  const per100 = Number(document.getElementById('calcPer100').value);
-  if(!amt||!per100) return alert('Enter values');
-  document.getElementById('calcResult').innerText = Math.round((amt/100)*per100)+' kcal';
-};
-
-// Chart rendering
-function renderChart(entries){
-  const last7 = {}; // date: calories
-  for(let i=6;i>=0;i--){
-    const d = new Date(); d.setDate(d.getDate()-i);
-    last7[d.toISOString().slice(0,10)] = 0;
-  }
-  entries.forEach(e=>{
-    const d = e.time.slice(0,10);
-    if(last7[d]!==undefined) last7[d]+=Number(e.calories);
-  });
-  const labels = Object.keys(last7);
-  const dataPoints = Object.values(last7);
-  if(chart) chart.destroy();
-  const ctx = document.getElementById('calorieChart').getContext('2d');
-  chart = new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels:labels,
-      datasets:[{label:'Calories', data:dataPoints, backgroundColor:'#2b6cb0'}]
-    },
-    options:{scales:{y:{beginAtZero:true}}}
-  });
-}
-</script>
-</body>
-</html>
+    <div id="entriesList"><div style="c
