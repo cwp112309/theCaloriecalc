@@ -7,72 +7,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: 'Inter', sans-serif; background: #f0f4f8; margin:0; padding:0; }
-.container { max-width: 900px; margin: 40px auto; padding: 20px; background:white; border-radius:15px; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+body { font-family: 'Inter', sans-serif; background: linear-gradient(120deg,#f0f4f8,#e6fffa); margin:0; padding:0; }
+.container { max-width: 950px; margin: 30px auto; padding: 20px; background:white; border-radius:20px; box-shadow:0 12px 25px rgba(0,0,0,0.1);}
 h1,h2,h3{margin:0;}
-header { display:flex; justify-content: space-between; align-items:center; margin-bottom:20px;}
-button{cursor:pointer;border:none;border-radius:8px;padding:8px 14px;font-weight:600;}
-button.primary{background:#2b6cb0;color:white;}
-button.secondary{background:#edf2f7;color:#1a202c;}
-.card{background:white;padding:18px;margin-bottom:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.05);}
+header { display:flex; justify-content: space-between; align-items:center; margin-bottom:20px; }
+button{cursor:pointer;border:none;border-radius:12px;padding:10px 18px;font-weight:600; transition: all 0.2s ease;}
+button.primary{background: #38b2ac;color:white;}
+button.primary:hover{background:#319795;}
+button.secondary{background:#e2e8f0;color:#1a202c;}
+button.secondary:hover{background:#cbd5e0;}
+.card{background:white;padding:20px;margin-bottom:20px;border-radius:15px;box-shadow:0 8px 20px rgba(0,0,0,0.08); transition: transform 0.2s;}
+.card:hover{transform: translateY(-3px);}
 label{display:block;margin-top:10px;font-weight:500;}
-input[type="text"],input[type="number"],input[type="password"]{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #cbd5e0;}
-#entriesList div{padding:6px 0;display:flex;justify-content:space-between;border-bottom:1px dashed #e2e8f0;}
-.tot{font-size:20px;font-weight:700;margin-top:8px;color:#2b6cb0;}
-#adPlaceholder{background:#e2e8f0;color:#718096;text-align:center;padding:12px;margin-bottom:12px;border-radius:8px;}
-a{color:#2b6cb0;text-decoration:none;}
-a:hover{text-decoration:underline;}
-</style>
-</head>
-<body>
-<div class="container">
-<header>
-<h1>Calorie Calc</h1>
-<div id="authUI">
-  <div id="anonArea">
-    <button id="showLogin" class="secondary">Login</button>
-    <button id="showSignup" class="secondary">Sign Up</button>
-    <span class="secondary" id="skipLogin" style="margin-left:10px;">Use Anonymously</span>
-  </div>
-  <div id="userArea" style="display:none;">
-    <span id="userEmail"></span>
-    <button id="logoutBtn" class="secondary">Logout</button>
-  </div>
-</div>
-</header>
-
-<div id="authCard" class="card">
-  <div id="signupForm" style="display:none;">
-    <h3>Sign Up</h3>
-    <label>Username <input id="signupUsername" type="text"></label>
-    <label>Password <input id="signupPass" type="password"></label>
-    <button id="signupBtn" class="primary">Sign Up</button>
-    <div style="margin-top:10px;">Already have an account? <a href="#" id="toLogin">Login</a></div>
-  </div>
-  <div id="loginForm" style="display:none;">
-    <h3>Login</h3>
-    <label>Username <input id="loginUsername" type="text"></label>
-    <label>Password <input id="loginPass" type="password"></label>
-    <button id="loginBtn" class="primary">Login</button>
-    <div style="margin-top:10px;">No account? <a href="#" id="toSignup">Sign Up</a></div>
-  </div>
-</div>
-
-<div id="mainContent" style="display:none;">
-  <div id="adPlaceholder">Ad Placeholder (Google Ads code here)</div>
-  
-  <div class="card">
-    <h3>Add Food</h3>
-    <label>Food name <input id="foodName" type="text" placeholder="Banana"></label>
-    <label>Calories <input id="calories" type="number" placeholder="105"></label>
-    <button id="addBtn" class="primary">Add Entry</button>
-  </div>
-
-  <div class="card">
-    <h3>Today's Total Calories</h3>
-    <div class="tot" id="todayTotal">0 kcal</div>
-  </div>
-
-  <div class="card">
-    <h3>Recent Entries</h3>
-    <div id="entriesList"><div style="c
+input[type="text"],input[type="number"],input[type="password"]{width:100%;padding:10px;margin-top:6px;border-radius:10px;border:1px solid #cbd5e0;}
+#entriesList div{padding:8px 0;display:flex;justify-content:space-between;border-bottom:1px dashed #e2e8f0;}
+.tot{font-size:24px;fon
